@@ -1,0 +1,15 @@
+---
+
+# Instalando o Docker
+
+- name: Instalando o Docker
+  zypper:
+    name: docker
+    state: present
+    force: yes
+  become: true
+  notify:
+    - Adicionando usuario ao grupo 'docker'
+    - Start Docker
+  tags:
+    - docker
