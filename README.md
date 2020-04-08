@@ -23,7 +23,7 @@ Tags da Role
 - deps: Instala os pacotes de dependências.
 
 - docker: Instala o Docker.
-
+- docker-fix: Aplica algumas correções no SO após instalar o Docker.
 
 
 Dependências da Role 

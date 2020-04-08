@@ -35,3 +35,42 @@
   become: true
   tags:
     - docker
+
+
+- name: "Alterando o arquivo /etc/default/grub com FIX para o Docker"
+  lineinfile:
+    state: present
+    dest: /etc/default/grub
+    backrefs: yes
+    regexp: '^(GRUB_CMDLINE_LINUX=(?!.* systemd.unified_cgroup_hierarchy)\"[^\"]+)(\".*)'
+    line: '\1 systemd.unified_cgroup_hierarchy=0\2'
+  become: true
+  tags:
+    - docker
+    - docker-fix
+
+
+- name: "Verifica se o boot é EFI or UEFI"
+  set_fact:
+    booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
+  tags:
+    - docker
+    - docker-fix
+
+
+- name: "Executando o comando grub2-mkconfig > /boot/efi/EFI/fedora/grub.cfg"
+  when: booted_with_efi
+  shell: "grub2-mkconfig > /boot/efi/EFI/fedora/grub.cfg"
+  become: true
+  tags:
+    - docker
+    - docker-fix
+
+
+- name: "Executando o comando grub2-mkconfig > /boot/grub2/grub.cfg"
+  when: not booted_with_efi
+  shell: "grub2-mkconfig > /boot/grub2/grub.cfg"
+  become: true
+  tags:
+    - docker
+    - docker-fix
