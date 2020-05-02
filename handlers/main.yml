@@ -3,8 +3,8 @@
 - name: Adicionando usuario ao grupo 'docker'
   user:
     name: "{{ ansible_user_id }}"
-    uid: "{{ ansible_user_uid }}"
-    group: docker
+    groups: docker
+    append: yes
   become: true
 
 - name: Start Docker
