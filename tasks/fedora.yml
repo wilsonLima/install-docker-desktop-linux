@@ -1,76 +1,25 @@
 ---
 
-# Instalando as dependencias do docker
 
-- name: "Instalando pacote dnf-plugins-core"
-  dnf:
-    name: dnf-plugins-core
-    state: present
-    disable_gpg_check: yes
-  become: true
-  tags:
-    - deps
-    - docker
-
-# Adicionando o repositório do Docker
-
-- name: "Adicionando repositório do Docker"
-  get_url:
-    url: "https://download.docker.com/linux/fedora/docker-ce.repo"
-    dest: /etc/yum.repos.d/docker-ce.repo
-  become: true
-  tags:
-    - docker
-    - repo
-
-# Instalando o Docker
-
-- name: Instalando o Docker
-  dnf:
-    name: docker-ce
-    state: present
-  notify:
-    - Adicionando usuario ao grupo 'docker'
-    - Start Docker
-  become: true
-  tags:
-    - docker
+- name: "Incluindo tarefas de instalação do Docker no Fedora versão 30 ou inferior"
+  when: ansible_distribution_major_version|int < 31
+  include_tasks: "fedora/fedora_30_or_less.yml"
+  tags: 
+   - docker
+   - main
 
 
-- name: "Alterando o arquivo /etc/default/grub com FIX para o Docker"
-  lineinfile:
-    state: present
-    dest: /etc/default/grub
-    backrefs: yes
-    regexp: '^(GRUB_CMDLINE_LINUX=(?!.* systemd.unified_cgroup_hierarchy)\"[^\"]+)(\".*)'
-    line: '\1 systemd.unified_cgroup_hierarchy=0\2'
-  become: true
-  tags:
-    - docker
-    - docker-fix
+- name: "Incluindo tarefas de instalação do Docker no Fedora versão 31"
+  when: ansible_distribution_major_version == "31"
+  include_tasks: "fedora/fedora_31.yml"
+  tags: 
+   - docker
+   - main
 
 
-- name: "Verifica se o boot é EFI or UEFI"
-  set_fact:
-    booted_with_efi: "{{ ansible_mounts | selectattr('mount', 'equalto', '/boot/efi') | list | length > 0 }}"
-  tags:
-    - docker
-    - docker-fix
-
-
-- name: "Executando o comando grub2-mkconfig > /boot/efi/EFI/fedora/grub.cfg"
-  when: booted_with_efi
-  shell: "grub2-mkconfig > /boot/efi/EFI/fedora/grub.cfg"
-  become: true
-  tags:
-    - docker
-    - docker-fix
-
-
-- name: "Executando o comando grub2-mkconfig > /boot/grub2/grub.cfg"
-  when: not booted_with_efi
-  shell: "grub2-mkconfig > /boot/grub2/grub.cfg"
-  become: true
-  tags:
-    - docker
-    - docker-fix
+- name: "Incluindo tarefas de instalação do Docker no Fedora versão 32 ou superior"
+  when: ansible_distribution_major_version|int > 31
+  include_tasks: "fedora/fedora_32_or_higher.yml"
+  tags: 
+   - docker
+   - main
