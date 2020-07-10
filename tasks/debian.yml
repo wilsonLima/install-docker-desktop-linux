@@ -84,6 +84,7 @@
     update_cache: yes
   notify:
     - Adicionando usuario ao grupo 'docker'
+    - Start Docker
   become: true
   tags:
     - docker
