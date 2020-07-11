@@ -5,8 +5,8 @@
 - name: Instalando o Docker
   zypper:
     name: docker
-    state: present
-    force: yes
+    state: latest
+    update_cache: yes
   become: true
   notify:
     - Adicionando usuario ao grupo 'docker'
