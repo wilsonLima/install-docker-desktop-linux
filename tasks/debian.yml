@@ -52,7 +52,7 @@
 - name: "Adicionando o Repositorio do Docker para o Linux Mint" 
   when: ansible_distribution == "Linux Mint" and ansible_distribution_release in mint_versions
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ mint_ubuntu_versions[ansible_distribution_major_version|string] }} stable"
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ the_mint_ubuntu_versions[ansible_distribution_major_version|string] }} stable"
     state: present
     filename: docker
     update_cache: yes
