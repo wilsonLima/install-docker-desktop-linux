@@ -1,25 +1,38 @@
 ---
 
 
-- name: "Incluindo tarefas de instalação do Docker no Fedora versão 30 ou inferior"
-  when: ansible_distribution_major_version|int < 31
-  include_tasks: "fedora/fedora_30_or_less.yml"
-  tags: 
-   - docker
-   - main
+# Instalando as dependencias do docker
 
+- name: "Instalando pacote dnf-plugins-core"
+  dnf:
+    name: dnf-plugins-core
+    state: present
+    disable_gpg_check: yes
+  become: true
+  tags:
+    - deps
+    - docker
 
-- name: "Incluindo tarefas de instalação do Docker no Fedora versão 31"
-  when: ansible_distribution_major_version == "31"
-  include_tasks: "fedora/fedora_31.yml"
-  tags: 
-   - docker
-   - main
+# Adicionando o repositório do Docker
 
+- name: "Adicionando repositório do Docker"
+  get_url:
+    url: "https://download.docker.com/linux/fedora/docker-ce.repo"
+    dest: /etc/yum.repos.d/docker-ce.repo
+  become: true
+  tags:
+    - docker
+    - repo
 
-- name: "Incluindo tarefas de instalação do Docker no Fedora versão 32 ou superior"
-  when: ansible_distribution_major_version|int > 31
-  include_tasks: "fedora/fedora_32_or_higher.yml"
-  tags: 
-   - docker
-   - main
+# Instalando o Docker
+
+- name: "Instalando o pacote Docker"
+  dnf:
+    name: docker-ce
+    state: present
+  notify:
+    - Adicionando usuario ao grupo 'docker'
+    - Start Docker
+  become: true
+  tags:
+    - docker
