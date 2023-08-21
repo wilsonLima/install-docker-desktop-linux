@@ -1,0 +1,6 @@
+---
+
+
+- debug: 
+    msg: Distribuição Linux não suportada
+  register: docker_unsupported_os
