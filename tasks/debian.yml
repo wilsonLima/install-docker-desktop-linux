@@ -1,7 +1,21 @@
 ---
 
 
-# Instalação do Docker
+# Instalação das dependências do Docker
+
+- name: "Instalando dependências para o Docker"
+  apt:
+    name: "{{ docker_debian_deps }}"
+    state: present
+  notify:
+    - Adicionando usuario ao grupo 'docker'
+    - Start Docker
+  become: true
+  tags:
+    - docker
+
+
+# Adicionando o repositório do Docker
 
 - name: "Importando a chave do repositorio do Docker para o Debian ou Ubuntu"
   when: ansible_distribution == "Debian" or ansible_distribution == "Ubuntu"
@@ -86,7 +100,7 @@
 
 - name: Instalando o Docker
   apt:
-    name: docker-ce
+    name: "{{ packages }}"
     state: present
   notify:
     - Adicionando usuario ao grupo 'docker'

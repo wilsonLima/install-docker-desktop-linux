@@ -1,5 +1,20 @@
 ---
 
+
+docker_debian_deps:
+  - ca-certificates 
+  - curl 
+  - gnupg
+
+
+packages: 
+  - docker-ce 
+  - docker-ce-cli 
+  - containerd.io 
+  - docker-buildx-plugin 
+  - docker-compose-plugin
+
+
 mint_debian_versions: {
   "2" : "jessie",
   "3" : "stretch",
@@ -43,3 +58,4 @@ mint_versions :
   - una
   - vanessa
   - vera
+  - victoria

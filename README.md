@@ -6,12 +6,12 @@ Role do Ansible com os passos para a instalação do Docker CE em distribuiçõe
 Distribuições Suportadas pela Role
 ------------
 
-- Fedora 35 ou superior
-- Linux Mint LMDE 3 ou superior
-- Linux Mint 19.2 ou superior
+- Fedora 37 ou superior
+- Linux Mint LMDE 5 ou superior
+- Linux Mint 21 ou superior
 - openSUSE Leap 15.0 ou superior
 - openSUSE Tumbleweed
-- Ubuntu 19.04 ou superior
+- Ubuntu 22.10 ou superior
 
 
 Tags da Role 

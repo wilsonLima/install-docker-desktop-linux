@@ -28,7 +28,7 @@
 
 - name: "Instalando o pacote Docker"
   dnf:
-    name: docker-ce
+    name: "{{ packages }}"
     state: present
   notify:
     - Adicionando usuario ao grupo 'docker'
