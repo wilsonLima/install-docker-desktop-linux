@@ -12,6 +12,7 @@
   tags:
     - deps
     - docker
+    - repo
 
 # Adicionando o repositório do Docker
 

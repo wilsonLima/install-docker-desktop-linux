@@ -7,12 +7,11 @@
   apt:
     name: "{{ docker_debian_deps }}"
     state: present
-  notify:
-    - Adicionando usuario ao grupo 'docker'
-    - Start Docker
   become: true
   tags:
     - docker
+    - deps
+    - repo
 
 
 # Adicionando o repositório do Docker
